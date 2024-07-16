@@ -1,18 +1,24 @@
 import './style.css'
 
-const zero = 0
 
 document.querySelector('#app').innerHTML = `
   <div >
     <h1>Beziers</h1>
     <canvas></canvas>
-    <input type="text" placeholder="t_value" id="tValueInput"></input>
     <div class="slidecontainer">
       <input type="range" min="0" max="1" value="0" step="0.01" class="slider" id="myRange">
     </div>
     <div id = "container"></div>
   </div>
 `
+
+
+const stepSize = 0.01
+let t = 0;
+const canvas = document.querySelector("canvas")
+canvas.width = innerWidth / 2
+canvas.height = innerHeight / 2
+const c = canvas.getContext("2d")
 
 class Vector2 {
   constructor(x, y) {
@@ -44,28 +50,37 @@ class Vector2 {
 }
 
 class BezierGuide {
-  constructor(p1, p2) {
+  constructor(p1, p2, p3) {
     this.p1 = p1
     this.p2 = p2
-    this.tPoint = p1.lerp(p2, 0)
+    this.p3 = p3
+    this.tPoint1 = p1.lerp(p2, 0)
+    this.tPoint2 = p2.lerp(p3, 0)
+    this.tPoint3 = this.tPoint1.lerp(this.tPoint2, 0)
+    this.bezierPoints = []
   }
 
-  draw(c) {
-    this.drawLine(c, this.p1, this.p2);
-    this.drawCircle(c, this.p1, 6, "rgba(0, 0, 0, 0.5)");
-    this.drawCircle(c, this.p2, 6, "rgba(0, 0, 0, 0.5)");
-    this.drawTPoint(c);
+  draw() {
+    this.drawLine(this.p1, this.p2, this.p3);
+    this.drawCircle(this.p1, 6, "rgba(0, 0, 0, 0.5)");
+    this.drawCircle(this.p2, 6, "rgba(0, 0, 0, 0.5)");
+    this.drawCircle(this.p3, 6, "rgba(0, 0, 0, 0.5)");
+    this.drawTPoints();
+    this.drawInterpolators();
+    this.drawBezierCurve();
   }
 
-  drawLine(c, p1, p2) {
+  drawLine(p1, p2, p3) {
     c.beginPath();
     c.moveTo(p1.x, p1.y);
     c.lineTo(p2.x, p2.y);
+    c.moveTo(p2.x, p2.y);
+    c.lineTo(p3.x, p3.y);
     c.stroke();
     c.closePath();
   }
 
-  drawCircle(c, center, radius, fillStyle) {
+  drawCircle(center, radius, fillStyle) {
     c.beginPath();
     c.fillStyle = fillStyle;
     c.arc(center.x, center.y, radius, 0, Math.PI * 2);
@@ -73,83 +88,63 @@ class BezierGuide {
     c.closePath();
   }
 
-  drawTPoint(c) {
-    this.drawCircle(c, this.tPoint, 4, "rgba(255, 0, 0, 0.7)");
+  drawTPoints() {
+    this.drawCircle(this.tPoint1, 4, "rgba(255, 0, 0, 0.7)");
+    this.drawCircle(this.tPoint2, 4, "rgba(255, 0, 0, 0.7)");
+    this.drawCircle(this.tPoint3, 4, "rgba(255, 0, 0, 0.7)");
   }
-  getTPoint(t) {
-    this.tPoint = this.p1.lerp(this.p2, t)
-    return this.tPoint
+  updateTPoint(t) {
+    this.tPoint1 = this.p1.lerp(this.p2, t)
+    this.tPoint2 = this.p2.lerp(this.p3, t)
+    this.tPoint3 = this.tPoint1.lerp(this.tPoint2, t)
+  }
+  drawInterpolators(){
+    c.beginPath();
+    c.moveTo(this.tPoint1.x, this.tPoint1.y);
+    c.lineTo(this.tPoint2.x, this.tPoint2.y);
+    c.stroke();
+    c.closePath();
+  }
+  computeBezierPoints(){
+    this.bezierPoints = []
+    for(let i = 0; i<=1; i+= stepSize){
+      let p12 = this.p1.lerp(this.p2, i)
+      let p23 = this.p2.lerp(this.p3, i)
+      let p123 = p12.lerp(p23, i)
+      this.bezierPoints.push(p123)
+    }
+  }
+  drawBezierCurve(){
+    if(this.bezierPoints.length === 0){
+      this.computeBezierPoints();
+    }
+    c.beginPath();
+    c.moveTo(this.bezierPoints[0].x, this.bezierPoints[0].y);
+    for(let i=1; i<this.bezierPoints.length; i++){
+      c.lineTo(this.bezierPoints[i].x, this.bezierPoints[i].y);
+    }
+    c.stroke()
+    c.closePath();
   }
 }
-const canvas = document.querySelector("canvas")
-canvas.width = innerWidth / 2
-canvas.height = innerHeight / 2
 
-const input = document.getElementById("tValueInput");
 
+const b1 = new BezierGuide(new Vector2(40, 20), new Vector2(430, 20), new Vector2(430, 400))
 
 var slider = document.getElementById("myRange");
 
 slider.oninput = function () {
   t = this.value;
-  bGuides.forEach(b => {
-    b.getTPoint(t);
-  });
+  b1.updateTPoint(t);
   document.getElementById("container").innerHTML = `Current T Value is: ${t}`
 
-}
-
-let t = 0;
-
-input.onkeydown = (e) => {
-  if (e.keyCode == 13) {
-    tSubmit();
-  }
 }
 
 document.getElementById("container").innerHTML = `Current T Value is: ${t}`
 
-function tSubmit() {
-  t = input.value || 0;
-  bGuides.forEach(b => {
-    b.getTPoint(t);
-  });
-  console.log(input.value);
-  document.getElementById("container").innerHTML = `Current T Value is: ${t}`
-
-}
-
-const c = canvas.getContext("2d")
-
-const b1 = new BezierGuide(new Vector2(40, 20), new Vector2(430, 20))
-const b2 = new BezierGuide(new Vector2(40, 400), new Vector2(430, 400))
-let b3 = new BezierGuide(b1.getTPoint(0), b2.getTPoint(0))
-
-let bGuides = [b1, b2, b3];
 
 function drawBezierGuides() {
-  bGuides.forEach(b => {
-    b.draw(c);
-  });
-}
-
-
-function connect2Points(p1, p2, c, drawPoints = false) {
-  c.beginPath();
-  c.moveTo(p1.x, p1.y)
-  c.lineTo(p2.x, p2.y)
-  c.strokewidth = 2;
-  c.stroke();
-  c.closePath();
-  if (drawPoints) {
-    c.beginPath();
-    c.fillStyle = "rgba(0, 0, 0, 1)";
-    c.arc(p1.x, p1.y, 6, 0, Math.PI * 2);
-    c.fill();
-    c.arc(p2.x, p2.y, 6, 0, Math.PI * 2);
-    c.fill();
-    c.closePath();
-  }
+  b1.draw();
 }
 
 function init() {
@@ -157,11 +152,28 @@ function init() {
 
 function animate() {
   c.clearRect(0, 0, innerWidth, innerHeight)
-  b3.p1 = b1.getTPoint(t);
-  b3.p2 = b2.getTPoint(t);
   drawBezierGuides();
   requestAnimationFrame(animate)
 }
 
 init()
 animate();
+
+
+// function connect2Points(p1, p2, c, drawPoints = false) {
+//   c.beginPath();
+//   c.moveTo(p1.x, p1.y)
+//   c.lineTo(p2.x, p2.y)
+//   c.strokewidth = 2;
+//   c.stroke();
+//   c.closePath();
+//   if (drawPoints) {
+//     c.beginPath();
+//     c.fillStyle = "rgba(0, 0, 0, 1)";
+//     c.arc(p1.x, p1.y, 6, 0, Math.PI * 2);
+//     c.fill();
+//     c.arc(p2.x, p2.y, 6, 0, Math.PI * 2);
+//     c.fill();
+//     c.closePath();
+//   }
+// }
