@@ -82,6 +82,7 @@ export class GenBezier {
     
     // compute curve points and store in tracer for caching
     computeBezierPoints() {
+        this.tracer = []
         let len = this.points.length
         let val
 
@@ -114,6 +115,17 @@ export class GenBezier {
         c.stroke()
         c.closePath();
     }
+
+    add(point){
+        this.points.push(point)
+        this.reset()
+    }
+
+    delete(ind){
+        this.points.splice(ind, 1)
+        this.reset()
+    }
+
     reset() {
 
         let tempBezierPoints = []
@@ -129,6 +141,7 @@ export class GenBezier {
         }
         this.bezierPoints = [...tempBezierPoints]
 
+        this.computeBezierPoints()
         // this.tracer = []  
         // this should be done when changing vertices, so maybe accept a boolean condition to check whether vertices are being replaced or just the t value
     }

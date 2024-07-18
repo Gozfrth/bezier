@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color: rgba(255, 255, 255, 0.87);
-  background-color: #333333;
+  background-color: #1d1d1d;
 }
 
 canvas {
@@ -99,4 +99,36 @@ input:hover {
   /* Green background */
   cursor: pointer;
   /* Cursor on hover */
+}
+
+.rightyShow{
+  z-index: 1000;
+  position: absolute;
+  display: block;
+  background-color: #2d2d2d;
+  border: 2px solid white ;
+  box-shadow: 0 0 4px #ffffff;
+  border-radius: 0 16px 16px 16px;
+  margin: 0;
+  width: auto;
+  height: auto;
+}
+
+.rightyHide{
+  display: none;
+}
+
+.addButton, .deleteButton{
+  cursor: pointer;
+  width: 100%;
+  padding: 0.5em 1em 0.5em 1em;
+  margin: 0;
+  border-radius: 0 16px 16px 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.addButton{
+  color: #BAFFC9;
+}
+.deleteButton{
+  color: #FFB3BA;
 }
