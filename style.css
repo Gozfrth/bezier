@@ -1,19 +1,19 @@
 :root {
-  font-family:  Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #333333;
 }
 
-canvas{
+canvas {
   padding-left: 0;
   padding-right: 0;
   margin-left: auto;
   margin-right: auto;
   display: block;
-  background-color: wheat;
+  background-color: black;
 }
 
 
@@ -36,49 +36,67 @@ input:hover {
 }
 
 
-#container{
+#container {
   margin-top: 1em;
   text-align: center;
   color: #888;
 }
 
 .slidecontainer {
-  width: 100%; /* Width of the outside container */
+  width: 100%;
+  /* Width of the outside container */
 }
 
 /* The slider itself */
 .slider {
   padding: 4px;
-  -webkit-appearance: none;  /* Override default CSS styles */
+  -webkit-appearance: none;
+  /* Override default CSS styles */
   appearance: none;
-  width: 9em; /* Full-width */
-  height: 1em; /* Specified height */
-  background: #e7e7e7; /* Grey background */
-  outline: none; /* Remove outline */
-  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  width: 9em;
+  /* Full-width */
+  height: 1em;
+  /* Specified height */
+  background: #e7e7e7;
+  /* Grey background */
+  outline: none;
+  /* Remove outline */
+  opacity: 0.7;
+  /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s;
+  /* 0.2 seconds transition on hover */
   transition: opacity .2s;
 }
 
 /* Mouse-over effects */
 .slider:hover {
-  opacity: 1; /* Fully shown on mouse-over */
+  opacity: 1;
+  /* Fully shown on mouse-over */
 }
 
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 .slider::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Override default look */
+  -webkit-appearance: none;
+  /* Override default look */
   appearance: none;
   border-radius: 4px;
-  width: 1em; /* Set a specific slider handle width */
-  height: 1em; /* Slider handle height */
-  background: #bb2222; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  width: 1em;
+  /* Set a specific slider handle width */
+  height: 1em;
+  /* Slider handle height */
+  background: #bb2222;
+  /* Green background */
+  cursor: pointer;
+  /* Cursor on hover */
 }
 
 .slider::-moz-range-thumb {
-  width: 25px; /* Set a specific slider handle width */
-  height: 1em; /* Slider handle height */
-  background: #04AA6D; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  width: 25px;
+  /* Set a specific slider handle width */
+  height: 1em;
+  /* Slider handle height */
+  background: #04AA6D;
+  /* Green background */
+  cursor: pointer;
+  /* Cursor on hover */
 }
