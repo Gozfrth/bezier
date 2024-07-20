@@ -9,7 +9,7 @@ const colors = [
     "#C4C4C4",
     "#FFF0BA"
 ];
-
+const e = 0.0000001
 export class GenBezier {
     constructor(points = [], stepSize) {
         this.points = points // Initial control points
@@ -17,6 +17,7 @@ export class GenBezier {
         this.t = 0 // t-value
         this.bezierPoints = [] // multi layer array to store intermediate control points
         this.tracer = [] // Curve points cached here to avoid recomputing every frame
+        this.updateCache = false
 
         let temp = [...this.points]
         for (let i = 0; i < this.points.length - 1; i++) {
@@ -76,7 +77,11 @@ export class GenBezier {
     // function to update tValue and all intermediate control points
     updateTPoint(t) {
         this.t = t
-        console.log(this.t)
+        this.reset()
+    }
+
+    updateStepSize(stepSize) {
+        this.stepSize = stepSize
         this.reset()
     }
     
@@ -86,7 +91,7 @@ export class GenBezier {
         let len = this.points.length
         let val
 
-        for (let k = 0; k <= 1; k += this.stepSize) {
+        for (let k = 0; k <= 1 + e; k += this.stepSize) {
             let temp = [...this.points]
             for (let i = 0; i < len - 1; i++) {
                 for (let j = 0; j < temp.length - 1; j++) {
@@ -102,8 +107,9 @@ export class GenBezier {
     }
 
     drawBezierCurve(c) {
-        if (this.tracer.length === 0) {
+        if (this.tracer.length === 0 || this.updateCache) {
             // initially
+            console.log("Updating cached points")
             this.computeBezierPoints();
         }
         c.beginPath();
@@ -118,7 +124,7 @@ export class GenBezier {
 
     add(point){
         this.points.push(point)
-        this.reset()
+        this.reset(true)
     }
 
     delete(ind){
@@ -126,7 +132,7 @@ export class GenBezier {
         this.reset()
     }
 
-    reset() {
+    reset(resetCache = false) {
 
         let tempBezierPoints = []
 
@@ -141,7 +147,11 @@ export class GenBezier {
         }
         this.bezierPoints = [...tempBezierPoints]
 
-        this.computeBezierPoints()
+        if(resetCache){
+            this.tracer = []
+        }else{
+            this.computeBezierPoints()
+        }
         // this.tracer = []  
         // this should be done when changing vertices, so maybe accept a boolean condition to check whether vertices are being replaced or just the t value
     }

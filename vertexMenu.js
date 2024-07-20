@@ -3,6 +3,7 @@ export function righty(e, points, rect, delHelper, addHelper) {
     let Yer = e.clientY - rect.top
 
     let righty = document.getElementById("righty")
+    
     let vertInd = -1
     for (let i = 0; i < points.length; i++) {
         if (points[i].x - 5 < Xer && points[i].x + 5 > Xer && points[i].y - 5 < Yer && points[i].y + 5 > Yer) {

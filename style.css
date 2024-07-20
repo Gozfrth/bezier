@@ -16,32 +16,87 @@ canvas {
   background-color: black;
 }
 
-
 input {
   margin-top: 3em;
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  background-color: #1a1a1a;
-  cursor: text;
   transition: border-color 0.5s;
   margin-left: auto;
   margin-right: auto;
   display: block;
 }
 
+.slider {
+  background-color: #1a1a1a;
+}
+
+.text {
+  background-color: black;
+  color: #888888;
+  cursor: text;
+}
+
 input:hover {
   border-color: #aa2222;
 }
 
-
-#container {
+#containerT {
   margin-top: 1em;
   text-align: center;
   color: #888;
 }
 
+#containerStep {
+  margin-top: 1em;
+  text-align: center;
+  color: #888;
+}
+
+#currentDegree {
+  margin-left: 1em;
+  margin-bottom: 1em;
+  color: #888;
+}
+
+.rightyShow {
+  z-index: 1000;
+  position: absolute;
+  display: block;
+  background-color: #2d2d2d;
+  border: 2px solid white;
+  box-shadow: 0 0 4px #ffffff;
+  border-radius: 0 16px 16px 16px;
+  margin: 0;
+  width: auto;
+  height: auto;
+}
+
+.rightyHide {
+  display: none;
+}
+
+.addButton,
+.deleteButton {
+  cursor: pointer;
+  width: 100%;
+  padding: 0.5em 1em 0.5em 1em;
+  margin: 0;
+  border-radius: 0 16px 16px 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.addButton {
+  color: #BAFFC9;
+}
+
+.deleteButton {
+  color: #FFB3BA;
+}
+
+
+/* https://www.w3schools.com/howto/howto_js_rangeslider.asp */
 .slidecontainer {
   width: 100%;
   /* Width of the outside container */
@@ -99,36 +154,4 @@ input:hover {
   /* Green background */
   cursor: pointer;
   /* Cursor on hover */
-}
-
-.rightyShow{
-  z-index: 1000;
-  position: absolute;
-  display: block;
-  background-color: #2d2d2d;
-  border: 2px solid white ;
-  box-shadow: 0 0 4px #ffffff;
-  border-radius: 0 16px 16px 16px;
-  margin: 0;
-  width: auto;
-  height: auto;
-}
-
-.rightyHide{
-  display: none;
-}
-
-.addButton, .deleteButton{
-  cursor: pointer;
-  width: 100%;
-  padding: 0.5em 1em 0.5em 1em;
-  margin: 0;
-  border-radius: 0 16px 16px 16px;
-  background-color: rgba(255, 255, 255, 0.1);
-}
-.addButton{
-  color: #BAFFC9;
-}
-.deleteButton{
-  color: #FFB3BA;
 }
